@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rugs</title>
+    <script>
+      window.__RUNTIME_ENV__ = { nodeEnv: '__VITE_NODE_ENV__' };
+    </script>
+    <script>
+      (function () {
+        const qs = new URLSearchParams(window.location.search);
+        const defaultApiBase = "https://rugstartbacknd-production.up.railway.app";
+        const apiBase = (qs.get("api") || defaultApiBase).replace(/\/+$/, "");
+        window.__API_BASE__ = apiBase;
+        window.__PRIVY_CONFIG__ = {
+          appId: "cmocbrrwq00mu0cl72oq5wau8",
+          clientId: "client-WY6YeKUofuEgB2j7rwnYWgA7umakqaYAEKeN9PsfCR4Un"
+        };
+
+        const oldPrivyClientId = "client-WY5hqDPssYPd9RRKv5wJzKL6HgcmL3BuEGv5tWv9XNXwX";
+        const newPrivyClientId = window.__PRIVY_CONFIG__.clientId;
+
+        function shouldRewrite(url) {
+          if (!url) return false;
+          const host = (url.hostname || "").toLowerCase();
+          const path = url.pathname || "";
+          if (path.startsWith("/api/")) return true;
+          if (host.endsWith("rugs.fun")) return true;
+          if (host.includes("rugstartbacknd-production.up.railway.app")) return true;
+          return false;
+        }
+
+        function rewriteInput(input) {
+          let url;
+          try {
+            url = new URL(input, window.location.origin);
+          } catch (_e) {
+            if (typeof input === "string" && input.includes(oldPrivyClientId)) {
+              return input.replaceAll(oldPrivyClientId, newPrivyClientId);
+            }
+            return input;
+          }
+          let rewritten = typeof input === "string" ? input : url.toString();
+          if (rewritten.includes(oldPrivyClientId)) {
+            rewritten = rewritten.replaceAll(oldPrivyClientId, newPrivyClientId);
+            url = new URL(rewritten, window.location.origin);
+          }
+          if (!shouldRewrite(url)) return rewritten;
+          if (!url.pathname.startsWith("/api/")) return rewritten;
+          return apiBase + url.pathname + (url.search || "");
+        }
+
+        const originalFetch = window.fetch.bind(window);
+        window.fetch = function (input, init) {
+          try {
+            if (typeof input === "string") {
+              const rewrittenUrl = rewriteInput(input);
+              const rewrittenInit = { ...(init || {}) };
+              if (typeof rewrittenInit.body === "string" && rewrittenInit.body.includes(oldPrivyClientId)) {
+                rewrittenInit.body = rewrittenInit.body.replaceAll(oldPrivyClientId, newPrivyClientId);
+              }
+              return originalFetch(rewrittenUrl, rewrittenInit);
+            }
+            if (input instanceof Request) {
+              const rewritten = rewriteInput(input.url);
+              if (rewritten !== input.url) {
+                const clonedInit = {
+                  method: input.method,
+                  headers: input.headers,
+                  body: init && init.body ? init.body : undefined,
+                  mode: input.mode,
+                  credentials: input.credentials,
+                  cache: input.cache,
+                  redirect: input.redirect,
+                  referrer: input.referrer,
+                  referrerPolicy: input.referrerPolicy,
+                  integrity: input.integrity,
+                  keepalive: input.keepalive,
+                  signal: input.signal
+                };
+                return originalFetch(new Request(rewritten, clonedInit), init);
+              }
+              if (init && typeof init.body === "string" && init.body.includes(oldPrivyClientId)) {
+                const patchedInit = { ...init, body: init.body.replaceAll(oldPrivyClientId, newPrivyClientId) };
+                return originalFetch(input, patchedInit);
+              }
+            }
+          } catch (_e) {}
+          return originalFetch(input, init);
+        };
+
+        const NativeWebSocket = window.WebSocket;
+        if (typeof NativeWebSocket === "function") {
+          window.WebSocket = function (url, protocols) {
+            try {
+              const parsed = new URL(url, window.location.origin);
+              if (parsed.pathname.startsWith("/api/") && shouldRewrite(parsed)) {
+                const wsBase = apiBase.replace(/^http/, "ws");
+                const rewritten = wsBase + parsed.pathname + (parsed.search || "");
+                return protocols ? new NativeWebSocket(rewritten, protocols) : new NativeWebSocket(rewritten);
+              }
+            } catch (_e) {}
+            return protocols ? new NativeWebSocket(url, protocols) : new NativeWebSocket(url);
+          };
+          window.WebSocket.prototype = NativeWebSocket.prototype;
+        }
+
+        console.log("[API Shim] Using backend:", apiBase);
+      })();
+    </script>
+    <!-- Material Symbols: https://fonts.google.com/icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0..200">
+
+    <!-- Preload font files -->
+    <link rel="preload" href="fonts/DynaPuff-VariableFont_wdth,wght.ttf" as="font" type="font/ttf" crossorigin="">
+    <link rel="preload" href="fonts/DynaPuff-Regular.ttf" as="font" type="font/ttf" crossorigin="">
+    <link rel="preload" href="fonts/DynaPuff-Medium.ttf" as="font" type="font/ttf" crossorigin="">
+    <link rel="preload" href="fonts/DynaPuff-SemiBold.ttf" as="font" type="font/ttf" crossorigin="">
+    <link rel="preload" href="fonts/DynaPuff-Bold.ttf" as="font" type="font/ttf" crossorigin="">
+    <link rel="preload" href="fonts/GulfsDisplay-Variable.ttf" as="font" type="font/ttf" crossorigin="">
+    <link rel="preload" href="fonts/GulfsDisplay-Normal.ttf" as="font" type="font/ttf" crossorigin="">
+
+    <link rel="preload" href="rugsfun_logo.png" as="image">
+
+    <!-- Initial loading styles -->
+    <style>
+      #initial-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #15161d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      }
+
+      #initial-loading-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        max-width: 400px;
+        width: 90%;
+      }
+
+      #initial-loading-logo {
+        max-width: 300px;
+        width: 100%;
+        height: auto;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      }
+
+      #initial-progress-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      #initial-progress-bar {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      #initial-progress-fill {
+        height: 100%;
+        background: linear-gradient(to right, #713f12, #ffc700);
+        border-radius: 4px;
+        width: 0%;
+        transition: width 0.3s ease;
+        position: relative;
+      }
+
+      #initial-progress-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20px;
+        height: 100%;
+        background: linear-gradient(to right, transparent, #ffc700);
+        border-radius: 0 4px 4px 0;
+        box-shadow:
+          0 0 10px #ffc700,
+          0 0 20px #ffc700,
+          0 0 30px #ffc700;
+        opacity: 0.8;
+      }
+    </style>
+    <script type="module" crossorigin="" src="assets/index-DW22fzg7.js"></script>
+    <link rel="stylesheet" crossorigin="" href="assets/index-BsPVJ8oX.css">
+  </head>
+  <body>
+    <!-- Theme detection script - disabled (no seasonal theme selection during initial load) -->
+    <script>
+      (function () {
+        /*
+        // Detect active theme (same logic as eventThemes.ts)
+        function getActiveTheme() {
+          // Check URL params for dev override
+          var urlParams = new URLSearchParams(window.location.search);
+          var devTheme = urlParams.get('dev_theme');
+          if (
+            devTheme &&
+            ['halloween', 'thanksgiving', 'christmas', 'default'].indexOf(devTheme) !== -1
+          ) {
+            return devTheme;
+          }
+          // Check localStorage for dev override
+          try {
+            var lsTheme = localStorage.getItem('DEV_THEME');
+            if (
+              lsTheme &&
+              ['halloween', 'thanksgiving', 'christmas', 'default'].indexOf(lsTheme) !== -1
+            ) {
+              return lsTheme;
+            }
+          } catch (e) {}
+          // Check date-based theme
+          var now = new Date();
+          var thanksgivingEnd = new Date('2025-12-01T00:00:00Z');
+          if (now < thanksgivingEnd) {
+            return 'thanksgiving';
+          }
+          var christmasEnd = new Date('2026-01-08T00:00:00Z');
+          if (now < christmasEnd) {
+            return 'christmas';
+          }
+          return 'default';
+        }
+
+        var theme = getActiveTheme();
+        window.__initialTheme = theme;
+        window.__initialLogoUrl =
+          theme === 'default'
+            ? '/rugsfun_logo.png'
+            : theme === 'christmas'
+              ? '/rugsfun_combination_mark_beta_christmas.png'
+              : '/rugsfun_combination_mark_beta.png';
+        */
+
+        window.__initialTheme = 'default';
+        window.__initialLogoUrl = 'rugsfun_logo.png';
+      })();
+    </script>
+
+    <!-- Initial loading screen that shows immediately -->
+    <div id="initial-loading">
+      <div id="initial-loading-content">
+        <img id="initial-loading-logo" src="rugsfun_logo.png" alt="Rugs.fun Logo">
+        <script>
+          // Immediately set the correct logo based on detected theme
+          document.getElementById('initial-loading-logo').src = window.__initialLogoUrl;
+        </script>
+        <div id="initial-progress-container">
+          <div id="initial-progress-bar">
+            <div id="initial-progress-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="root"></div>
+    <div id="modal-root"></div>
+    <div id="local-error" style="display:none;position:fixed;left:16px;right:16px;bottom:16px;z-index:10001;background:#2a1f1f;color:#ffd7d7;border:1px solid #8a3a3a;border-radius:8px;padding:12px 14px;font-family:Arial,sans-serif;font-size:14px;line-height:1.4;">
+      Local launch issue: this exported build cannot fully connect to production services.
+      <div style="margin-top:8px;">
+        <a href="./local-playable.html" style="display:inline-block;background:#ffc700;color:#1a1607;text-decoration:none;padding:8px 12px;border-radius:6px;font-weight:700;">Open Local Playable Mode</a>
+      </div>
+    </div>
+
+    <!-- Initial progress simulation and React loading transition -->
+    <script>
+      let initialProgress = 0;
+      const initialProgressFill = document.getElementById('initial-progress-fill');
+
+      // Simulate initial progress for basic page loading
+      function updateInitialProgress() {
+        if (initialProgress < 30) {
+          initialProgress += Math.random() * 5;
+          if (initialProgressFill) {
+            initialProgressFill.style.width = Math.min(initialProgress, 30) + '%';
+          }
+          setTimeout(updateInitialProgress, 100);
+        }
+      }
+
+      // Start initial progress simulation
+      updateInitialProgress();
+
+      // Global function for React to update progress
+      window.updateLoadingProgress = function (progress) {
+        // Re-query the element each time in case DOM changed
+        const currentProgressFill = document.getElementById('initial-progress-fill');
+        if (currentProgressFill) {
+          currentProgressFill.style.width = progress + '%';
+        }
+      };
+
+      // Function to hide initial loading when assets are loaded
+      window.hideInitialLoading = function () {
+        const initialLoading = document.getElementById('initial-loading');
+        if (initialLoading) {
+          // Fade out initial loading
+          initialLoading.style.transition = 'opacity 0.3s ease-out';
+          initialLoading.style.opacity = '0';
+          setTimeout(() => initialLoading.remove(), 300);
+        }
+      };
+
+      // Fallback: don't stay on loading forever if bundle/chunks fail.
+      setTimeout(function () {
+        const initialLoading = document.getElementById('initial-loading');
+        if (initialLoading) {
+          window.hideInitialLoading();
+          const errorBanner = document.getElementById('local-error');
+          if (errorBanner) errorBanner.style.display = 'block';
+        }
+      }, 10000);
+    </script>
+  <!-- Cloudflare Pages Analytics removed for local offline compatibility -->
+
+</body></html>
